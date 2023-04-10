@@ -1,5 +1,6 @@
 import {Graph} from "../Classes/Graph";
 
+//funkcija atgriež pilno speles koku
 export const createGameGraph = (numberOfMatches, startPlayer) => {
     const stateGraph = {
         hello: undefined
@@ -15,6 +16,8 @@ export const createGameGraph = (numberOfMatches, startPlayer) => {
     return graph;
 }
 
+//paņem vienu virsotni un izdara visus iespējamus pēctečus no tās, un ja tie neeksistē grafā, tad peiraksta virsotni
+//un izdara zaru
 const divider = (arr, graph, node, level) => {
     level++;
 
@@ -45,6 +48,7 @@ const divider = (arr, graph, node, level) => {
     }
 }
 
+//sadala vienu skatli uz divām nevienādam daļām visos iespējamos variantos
 const numberDivider = (number) => {
     const result = [];
     for (let j = 1; j <= number / 2; j++) {
@@ -55,6 +59,7 @@ const numberDivider = (number) => {
     return result;
 }
 
+//pievieno virsotnei informāciju, kurš spēlētājs izpilda gajienu šajā spēles stāvoklī
 const parseLevel = (startPlayer, nodeLevel) => {
     let result = '';
     if (startPlayer) {
@@ -74,11 +79,11 @@ const setNodeMarks = (graph, startPlayer) => {
 
         const childNodes = graph.getNodeAEdges(node);
         if (!childNodes.length) {
-            mark = parsedLevel === 'max' ? -1 : 1;
+            mark = parsedLevel === 'max' ? -1 : 1;//ja nav pecteču, tad mark = -1, ja parsedLevel === 'max' un otrādi, ja 'min
         }
 
         if (childNodes.length === 1) {
-            mark = childNodes[0][1].b.mark;
+            mark = childNodes[0][1].b.mark;//ja ir tikai viens pectecis, tad ņemam to vērtējumu
         }
 
         if (childNodes.length >= 2) {
@@ -88,7 +93,8 @@ const setNodeMarks = (graph, startPlayer) => {
                 if (childNode[1].b.mark > maxValue) maxValue = childNode[1].b.mark;
                 if (childNode[1].b.mark < minValue) minValue = childNode[1].b.mark;
             })
-            mark = parsedLevel === 'max' ? maxValue : minValue;
+            mark = parsedLevel === 'max' ? maxValue : minValue; // ja ir 2 vai vairāk pecteču, tad ņemam maksimalo vērtējumu,
+                                                                //ja parsedLevel === 'max' un ortādi, ja 'min'
         }
 
         node.mark = mark;
