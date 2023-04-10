@@ -3,15 +3,16 @@ import './App.css';
 import {createGameGraph} from "./helpers/graph_helpers";
 
 function App() {
-    const [numberOfMatches, setNumberOfMatches] = useState(7);
-    const [startPlayer, setStartPlayer] = useState(0);
-    const [currentGameState, setCurrentGameState] = useState(null);
-    const [shownNodes, setShownNodes] = useState([]);
-    const [isStarted, setIsStarted] = useState(false);
-    const [graph, setGraph] = useState(null);
-    const [activeLevel, setActiveLevel] = useState(1);
-    const [gameResult, setGameResult] = useState(false);
+    const [numberOfMatches, setNumberOfMatches] = useState(7); //sērkociņu skaits ar kuru uzsāk spēli
+    const [startPlayer, setStartPlayer] = useState(0); // sakuma spēlētājs 0 - lietotājs, 1 - dators
+    const [currentGameState, setCurrentGameState] = useState(null); // spēles stāvoklis - virsotne uz kuras tagad ir spele
+    const [shownNodes, setShownNodes] = useState([]); // paradītu uz ekrana virsotņu massīvs
+    const [isStarted, setIsStarted] = useState(false);//boolean - kurš parada - vai spēle sakusies, vai nē
+    const [graph, setGraph] = useState(null);// grafs
+    const [activeLevel, setActiveLevel] = useState(1);// aktīvais līmenis - ir izveidots, lai izslēgtu visu augšēju limeņu pogas
+    const [gameResult, setGameResult] = useState(false);//spēles rezultāts
 
+    //funkcija uzsāk spēli, izveido grafu un izpilda gājienu, ja spēli uzsāk dators, vai parada sakuma spēles variantus, ja spēli uzsāk lietotājs
     const startGame = (event, numberOfMatches, startPlayer) => {
         event.preventDefault();
         const createdGraph = createGameGraph(numberOfMatches, startPlayer);
@@ -26,10 +27,13 @@ function App() {
         setIsStarted(true);
     }
 
+    //parada virsotņus uz ekrāna
     const showNodes = (nodes) => {
         setShownNodes([...shownNodes, ...nodes]);
     }
 
+    //parada virsotnes iespējamos variantus uz ekrāna, ja isStart === true, tad parada arī vēcaku virsotni, no kuras izveidojas varianti
+    //izmanto showNodes funkciju
     const showNodeVariants = (graph, node, isStart = false) => {
         const edges = graph.getNodeAEdges(node);
         const possibleVariants = [];
@@ -44,6 +48,8 @@ function App() {
         }
     }
 
+    //izpilda gajienu, novertē, visus iespējamos variantus, izvēlējas pirmo ar vērtējumu === 1
+    //ja nav virsotņu ar vērtējumu 1, tas nozīmē, ka dators nevarēs uzvarēt, ja lietotājs nepieļaus kļūdu, un ši gadījuma dators nejauši izvelas virsotni
     const makeTurn = (selectedNode, graph, isFromSelect = false) => {
         console.log('making turn...')
         const edges = graph.getNodeAEdges(selectedNode);
@@ -72,16 +78,19 @@ function App() {
 
     }
 
+    //funkcijas izsaucas, kad lietotās spiež uz varianta virsotnes pogu
     const selectVariant = (key) => {
         const selectedNode = graph.findNode(key);
         setCurrentGameState(selectedNode);
         makeTurn(selectedNode, graph, true);
     }
 
+    //izmaina sērkociņu skaitu
     const inputChangeHandler = (event) => {
         setNumberOfMatches(event.target.value);
     }
 
+    //izmaina startPlayer vērtību
     const selectChangeHandler = (event) => {
 		setStartPlayer(parseInt(event.target.value));
     }
@@ -104,6 +113,7 @@ function App() {
 
             <div className="nodes">
                 {
+                    //parada spēles sakuma virsotni
                     graph &&
                     <div className="nodes-level first">
                         <button className="node" disabled
@@ -114,6 +124,7 @@ function App() {
                     </div>
                 }
                 {
+                    //parada virsotnes
                     shownNodes.map(levelNodes =>
                         <div className="nodes-level">
                             {levelNodes.map(node =>
@@ -128,7 +139,9 @@ function App() {
                     )
                 }
             </div>
-            {gameResult &&
+            {
+                //parada spēles rezultātu
+                gameResult &&
                 <div className="result-overlay">
                     <div className="result">
                         {`${gameResult} WON!`}
