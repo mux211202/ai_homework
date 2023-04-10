@@ -20,14 +20,12 @@ export class Graph {
 	}
 
 	getNodeAEdges(node) {
-		const found = this.findNode(node.key);
 		let newIterable = this.edges.entries(this.edges);
 		let newArray = Array.from(newIterable)
 		return newArray.filter(edge =>JSON.stringify(edge[1].a) === JSON.stringify(node));
 	}
 
 	getNodeBEdges(node) {
-		const found = this.findNode(node.key);
 		let newIterable = this.edges.entries(this.edges);
 		let newArray = Array.from(newIterable)
 		return newArray.filter(edge =>JSON.stringify(edge[1].b) === JSON.stringify(node));
