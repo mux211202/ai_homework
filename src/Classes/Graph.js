@@ -22,14 +22,14 @@ export class Graph {
 		return this.nodes.find(x => x.key === key);
 	}
 
-	//atrod virsotnes zarus, kuras aizved uz virsotnes pēctečiem
+	//atrod virsotnes zarus, kuras aizvada uz virsotnes pēctečiem
 	getNodeAEdges(node) {
 		let newIterable = this.edges.entries(this.edges);
 		let newArray = Array.from(newIterable)
 		return newArray.filter(edge =>JSON.stringify(edge[1].a) === JSON.stringify(node));
 	}
 
-	//atrod virsotnes zarus, kuras aizved uz virsotnes priekštečiem
+	//atrod virsotnes zarus, kuras aizvada uz virsotnes priekštečiem
 	getNodeBEdges(node) {
 		let newIterable = this.edges.entries(this.edges);
 		let newArray = Array.from(newIterable)
